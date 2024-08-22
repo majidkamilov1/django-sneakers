@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="p-4">
+  <div class="flex justify-between items-center">
+    <h1 class="text-[32px] font-bold pb-[20px]">Все кроссовки</h1>
+
+    <!-- Форма поиска -->
+    <form method="GET" action=".">
+      <div class="flex mb-4">
+        <input
+          type="text"
+          name="q"
+          value="{{ request.GET.q }}"
+          placeholder="Поиск модели..."
+          class="p-2 py-1 border rounded-l-md"
+        />
+        <button
+          type="submit"
+          class="p-2 py-1 bg-[#3cc755] text-white rounded-r-md"
+        >
+          Найти
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="grid grid-cols-4 gap-4">
+    {% if sneakers %}
+      {% for sneaker in sneakers %}
+        <div
+          class="border flex flex-col relative rounded-[12px] p-2 hover:shadow-md transition-[.3s]"
+        >
+          <form
+            class="absolute top-2 left-2"
+            action="{% url 'toggle_favorite' sneaker.id %}"
+            method="post"
+          >
+            {% csrf_token %}
+            <button type="submit" 
+            class="items-center justify-center border rounded-md w-[28px] h-[28px] flex 
+            {% if sneaker.id in favorite_sneakers %} bg-[#EFB8B8] {% else %} bg-[#fff] {% endif %}"
+          >
+            <img src="{% static 'img/card/heart.svg' %}" alt="Like" />
+          </button>
+          </form>
+
+          <div class="w-full">
+            <img
+              class="w-full aspect-[1/1] object-cover rounded-[16px] object-center"
+              src="{% if sneaker.image %}{{ sneaker.image.url }}{% else %}{% static 'img/card/defaultImage.svg' %}{% endif %}"
+              alt="{{ sneaker.model }}"
+            />
+          </div>
+          <h4 class="text-[12px] my-3 flex-1">
+            {{ sneaker.description|slice:":100" }}{% if sneaker.description|length > 70 %}... {% endif %}
+          </h4>
+
+          <div class="flex justify-between items-center">
+            <div class="flex flex-col">
+              <span class="text-[#bdbdbd] text-[11px] font-medium">Цена:</span>
+              <b class="font-bold text-[14px]">{{ sneaker.price }} руб.</b>
+            </div>
+
+            <form action="{% url 'toggle_from_cart' sneaker.id %}" method="post">
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="w-[28px] h-[28px] flex items-center justify-center border rounded-md {% if sneaker.id in cart_sneaker_ids %} bg-[#3CC755] {% else %} bg-[#ffffff] {% endif %}"
+              >
+                <img src="{% static 'img/card/plus.svg' %}" alt="Add to Cart" />
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>Ничего не найдено.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

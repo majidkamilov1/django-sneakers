@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+</head>
+<body>
+    <div class="bg-[#e7f6ff] flex justify-center items-center min-h-screen">
+        <div class="rounded-[15px] relative bg-[#fff] w-full max-w-[400px] mx-auto p-4">
+            <a class="absolute top-4 right-4" href="{% url 'home' %}">
+                <img src="{% static 'img/x.svg' %}" alt="Close">
+            </a>
+            <h1 class="text-xl font-bold text-center pb-[20px]">Registration</h1>
+
+            <form method="post" action="{% url 'register' %}">
+                {% csrf_token %}
+
+                <div class="flex flex-col gap-1 border-b pb-4">
+                    <label for="id_first_name" class="text-sm font-medium"><b>First Name:</b></label>
+                    {{ form.first_name }}
+                </div>
+
+                <div class="flex flex-col gap-1 border-b pb-4">
+                    <label for="id_last_name" class="text-sm font-medium"><b>Last Name:</b></label>
+                    {{ form.last_name }}
+                </div>
+
+                <div class="flex flex-col gap-1 border-b pb-4">
+                    <label for="id_username" class="text-sm font-medium"><b>Username:</b></label>
+                    {{ form.username }}
+                </div>
+
+                <div class="flex flex-col gap-1 border-b pb-4">
+                    <label for="id_password1" class="text-sm font-medium"><b>Password:</b></label>
+                    {{ form.password1 }}
+                </div>
+
+                <div class="flex flex-col gap-1 border-b pb-4">
+                    <label for="id_password2" class="text-sm font-medium"><b>Confirm Password:</b></label>
+                    {{ form.password2 }}
+                </div>
+
+                <div class="flex justify-center gap-1 flex-col pt-5">
+                    <button type="submit"
+                            class="py-2 px-6 bg-[#A5D364] text-white font-semibold rounded-full transition-[.3s] shadow-md hover:bg-[#8ab154] focus:outline-none focus:ring focus:ring-[#8ab154] focus:ring-opacity-75">
+                        Register
+                    </button>
+                    <a  class="text-center text-blue-500 hover:text-blue-700" href="{% url "login" %}">Login</a>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% load static %} 
+{% load custom_total_cart %}
+
+<header class="flex border-b border-[#eaeaea] justify-between p-4">
+  <div class="flex gap-2 items-center">
+    <img class="w-20" src="{% static "img\logo.svg" %}" alt="" />
+    <div>
+      <h4 class="font-bold text-[20px] m-0">Django SNEAKERS</h4>
+      <span class="text-[14px] text-[#9d9d9d]">Магазин лучших кроссовок</span>
+    </div>
+  </div>
+  <ul class="flex gap-4 items-center max-800:hidden">
+    <li class="flex items-center gap-1">
+      <a class="flex items-center gap-1" href="{% url 'view_cart' %}">
+        <img src="{% static "img\nav\cart.svg"%}" alt="" />
+        <span class="font-semibold text-[14px] text-[#5c5c5c]">
+          {% total_price %} руб.
+        </span>
+      </a>
+    </li>
+    <li>
+      <a class="flex items-center gap-1" href="{% url 'favorite_list' %}">
+        <img src="{% static '\img\nav\heard.svg' %}" alt="" />
+        <span class="text-[14px] text-[#5c5c5c]">Фавориты </span>
+      </a>
+    </li>
+    
+    <li class="flex items-center gap-1">
+      {% if user.is_authenticated %}
+      <a class="flex items-center gap-1" href="{% url 'profile' %}">
+        <img src="{% static "img\nav\profile.svg"%}" alt="" />
+        <span class="text-[14px] text-[#5c5c5c]">Профиль</span>
+      </a>
+
+      {% else %}
+      <a class="flex items-center gap-1" href="{% url 'login' %}">
+        <img src="{% static "img\nav\login.svg"%}" alt="" />
+        <span class="text-[14px] text-[#5c5c5c]">Login</span>
+      </a>
+      {% endif %}
+    </li>
+  </ul>
+  <div class="max-800:flex hidden flex-col justify-center gap-1">
+    <span class="h-1 bg-black w-[23px] rounded"></span>
+    <span class="h-1 bg-black w-[18px] rounded"></span>
+    <span class="h-1 bg-black w-[23px] rounded"></span>
+  </div>
+</header>

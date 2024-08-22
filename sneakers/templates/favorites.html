@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="p-4">
+  <h1 class="text-[32px] font-bold pb-[20px]">Избранные кроссовки</h1>
+
+  {% if favorite_sneakers %}
+    <div class="grid grid-cols-4 gap-4">
+      {% for sneaker in favorite_sneakers %}
+      <div class="border flex flex-col relative rounded-[12px] p-2 hover:shadow-md transition-[.3s]">
+        
+        <!-- Favorite Button -->
+        <form
+          class="absolute top-2 left-2"
+          action="{% url 'remove_favorite' sneaker.id %}"
+          method="post"
+        >
+          {% csrf_token %}
+          <button 
+            type="submit"
+            class="items-center justify-center border rounded-md w-[28px] h-[28px] flex bg-[#EFB8B8]"
+          >
+            <img src="{% static 'img/card/heart.svg' %}" alt="Like" />
+          </button>
+        </form>
+
+        <!-- Sneaker Image -->
+        <div class="w-full">
+          <img
+            class="w-full aspect-[1/1] object-cover rounded-[16px] object-center"
+            src="{% if sneaker.image %}{{ sneaker.image.url }}{% else %}{% static 'img/card/defaultImage.svg' %}{% endif %}"
+            alt="{{ sneaker.model }}"
+          />
+        </div>
+
+        <!-- Sneaker Description -->
+        <h4 class="text-[12px] my-3 flex-1">
+          {{ sneaker.description|slice:":100" }}{% if sneaker.description|length > 70 %}... {% endif %}
+        </h4>
+
+        <!-- Sneaker Price and Cart Button -->
+        <div class="flex justify-between items-center">
+          <div class="flex flex-col">
+            <span class="text-[#bdbdbd] text-[11px] font-medium">Цена:</span>
+            <b class="font-bold text-[14px]">{{ sneaker.price }} руб.</b>
+          </div>
+
+          <form action="{% url 'toggle_from_cart' sneaker.id %}" method="post">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="w-[28px] h-[28px] flex items-center justify-center border rounded-md
+              {% if sneaker.id in cart_sneaker_ids %} bg-[#3CC755] {% else %} bg-[#ffffff] {% endif %}"
+            >
+              <img src="{% static 'img/card/plus.svg' %}" alt="Add to Cart" />
+            </button>
+          </form>
+        </div>
+        
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>У вас нет избранных кроссовок.</p>
+  {% endif %}
+</div>
+{% endblock content %}

@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <div
+      class="bg-[#e7f6ff] flex justify-center items-start pt-[100px] min-h-screen"
+    >
+      <div
+        class="rounded-[15px] relative bg-[#fff] w-full max-w-[500px] mx-auto p-4"
+      >
+        <a class="absolute top-4 right-4" href="{% url 'home' %}">
+          <img src="{% static 'img/x.svg' %}" alt="Close" />
+        </a>
+        <h1 class="text-xl font-bold text-center">Your Cart</h1>
+
+        {% if items %}
+        <ul>
+          {% for item in items %}
+          <li class="flex justify-between border-b relative items-center py-2">
+            <div class="flex items-center gap-4">
+              {% if item.sneaker.image %}
+              <img
+                src="{{ item.sneaker.image.url }}"
+                alt="{{ item.sneaker.model }}"
+                class="w-16 h-16 object-cover"
+              />
+              {% else %}
+              <img
+                src="{% static 'img/card/defaultImage.svg' %}"
+                alt="No image available"
+                class="w-16 h-16 object-cover"
+              />
+              {% endif %}
+              <div>
+                <span class="font-semibold"
+                  >Model: {{ item.sneaker.model }}</span
+                ><br />
+                <span class="text-gray-600"
+                  >Brand: {{ item.sneaker.brand }}</span
+                ><br />
+                <span class="text-gray-600">Size: {{ item.sneaker.size }}</span
+                ><br />
+                <span class="text-gray-600"
+                  >Price: {{ item.sneaker.price }} руб.</span
+                ><br />
+                <span class="text-gray-600"
+                  >Created by: {{ item.sneaker.created_by.username }}</span
+                >
+              </div>
+            </div>
+            <div class="items-center flex gap-1">
+              <a
+                href="{% url 'update_cart_item_quantity' item.id 'decrease' %}"
+                class="text-gray-600"
+                >-</a
+              >
+              <span class="">{{ item.quantity }}шт</span>
+              <a
+                href="{% url 'update_cart_item_quantity' item.id 'increase' %}"
+                class="text-gray-600"
+                >+</a
+              >
+            </div>
+            <a
+              href="{% url 'remove_from_cart' item.id %}"
+              class="scale-[.5] absolute top-0 right-0 pt-1"
+            >
+              <img src="{% static 'img/x.svg' %}" alt="Remove" />
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        <div class="flex mt-4 justify-between items-center">
+          <div class="text-center">
+            Total Price: {{ total_price|floatformat:2 }}
+          </div>
+          <button
+            class="py-2 px-6 bg-[#A5D364] text-white font-semibold rounded-full transition-[.3s] shadow-md hover:bg-[#8ab154] focus:outline-none focus:ring focus:ring-[#8ab154] focus:ring-opacity-75"
+          >
+            Купить
+          </button>
+        </div>
+        {% else %}
+        <p>Your cart is empty.</p>
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>
